@@ -1,7 +1,7 @@
 Coffee & Coding: stringr & regex with pirates
 ---------------------------------------------
-####*Tamsin Forbes*
-####*2018-09-19 [Talk Like a Pirate Day]*
+#### *Tamsin Forbes*
+#### *2018-09-19 [Talk Like a Pirate Day]*
 
 Intro
 -----
