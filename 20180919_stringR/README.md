@@ -1,7 +1,7 @@
 Coffee & Coding: stringr & regex with pirates
 ---------------------------------------------
-####_Tamsin Forbes_
-####_2018-09-19 [Talk Like a Pirate Day]_
+####*Tamsin Forbes*
+####*2018-09-19 [Talk Like a Pirate Day]*
 
 Intro
 -----
@@ -89,14 +89,14 @@ pirate_data %>% filter(str_detect(string = rdate, pattern = "/\\d\\d/"))
 That could get tedious if we have many digits, so we can specify the exact number, for example to match a pattern like "19/09/2018" we type 
 
 ```r
-pirate_data %>% filter(str_detect(string = rdate, pattern = "\\d2/\\d2/\\d4"))
+pirate_data %>% filter(str_detect(string = rdate, pattern = "\\d{2}/\\d{2}/\\d{4}"))
 ```
 
 All of the above match the pattern anywhere in the string, now lets specify position by achoring the start and end with `^` and `$`
 
 ```r
 pirate_data %>% filter(
-  str_detect(string = rdate, pattern = "^\\d2/\\d2/\\d4$"))
+  str_detect(string = rdate, pattern = "^\\d{2}/\\d{2}/\\d{4}$"))
 ```
 
 Great, we've identified all the patterns of exactly 2digits/2digits/4digits
@@ -106,7 +106,7 @@ Let's count these and compare to the count of those with the simple pattern "/"
 ```r
 pirate_data %>% filter(str_detect(string = rdate, pattern = "/")) %>% count() ==
   pirate_data %>% filter(
-    str_detect(string = rdate, pattern = "^\\d2/\\d2/\\d4$")) %>% count()
+    str_detect(string = rdate, pattern = "^\\d{2}/\\d{2}/\\d{4}$")) %>% count()
 ```
 
 The results of the specific search must at least be a subset of the simple search, since the count is the same we conclude that both searches return exactly the same results. This is important if it is necessary to optimise a search. While both will check every character of the strings that don't match, the simple search will stop at the third character of the strings that do match, as this is the first occurance of "/". The specific search will still have to check every character.
@@ -124,9 +124,9 @@ Here we've got two types, some are just dates, but some are datetimes. So we can
 ```r
 pirate_data %>% filter(str_detect(string = rdate, pattern = "-")) %>% count() ==
 pirate_data %>% filter( #match patterns like "2018-09-19", anchoring both ends
-  str_detect(string = rdate, pattern = "^\\d4-\\d2-\\d2$")) %>% count() +
+  str_detect(string = rdate, pattern = "^\\d{4}-\\d{2}-\\d{2}$")) %>% count() +
 pirate_data %>% filter( #match patterns like "2018-09-19T" anchoring start only
-  str_detect(string = rdate, pattern = "^\\d4-\\d2-\\d2T")) %>% count()
+  str_detect(string = rdate, pattern = "^\\d{4}-\\d{2}-\\d{2}T")) %>% count()
 ```
 
 The counts add up, so again the simple search is sufficient and we don't have any other date types using "-" such as dd-mm-yyyy.
@@ -148,7 +148,7 @@ pirate_data <- pirate_data %>% dplyr::mutate(
     , str_detect(string = rdate, pattern = "-") ~ lubridate::ymd(
       str_sub(string = rdate, start = 1, end = 10))
     #convert patterns like "42253" and "42253.63542..."
-    , str_detect(rdate, "^\\d5") ~ lubridate::as_date(
+    , str_detect(rdate, "^\\d{5}") ~ lubridate::as_date(
       as.numeric(str_sub(rdate, 1, 5)), origin = "1899-12-30")
     #specify what to do with the remaining unmatched rows
     #NB the type of NA must match the type of the rest, hence 
@@ -224,7 +224,7 @@ pirate_data <- pirate_data %>% dplyr::mutate(
 And double check that the NAs are as expected
 
 ```r
-tabyl(filter(pirate\_data, is.na(time)), time, rtime)
+tabyl(filter(pirate_data, is.na(time)), time, rtime)
 ```
 
 Hooray we have proper dates & times lets make datetimes!!!
@@ -294,7 +294,7 @@ pirate_exp %>% filter(str_detect(string = expression, pattern = "oa|oy"))
 Look for matches with between *n* and *m* occurances of a pattern using `n,m`
 
 ``` r
-pirate_exp %>% filter(str_detect(string = expression, pattern = "o3,4"))
+pirate_exp %>% filter(str_detect(string = expression, pattern = "o{3,4}"))
 ```
 
 Look for matches with a pattern preceded by another pattern

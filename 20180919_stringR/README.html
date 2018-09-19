@@ -192,15 +192,15 @@ head(pirate_data)</code></pre>
 <p>We know there are two digits in between two forward slashes, we can use the special character <code>\d</code> to match digits. To represent the special character we actually have to type <code>\\d</code>. For example, to match a pattern like “/09/” we type</p>
 <pre class="r"><code>pirate_data %&gt;% filter(str_detect(string = rdate, pattern = &quot;/\\d\\d/&quot;))</code></pre>
 <p>That could get tedious if we have many digits, so we can specify the exact number, for example to match a pattern like “19/09/2018” we type</p>
-<pre class="r"><code>pirate_data %&gt;% filter(str_detect(string = rdate, pattern = &quot;\\d2/\\d2/\\d4&quot;))</code></pre>
+<pre class="r"><code>pirate_data %&gt;% filter(str_detect(string = rdate, pattern = &quot;\\d{2}/\\d{2}/\\d{4}&quot;))</code></pre>
 <p>All of the above match the pattern anywhere in the string, now lets specify position by achoring the start and end with <code>^</code> and <code>$</code></p>
 <pre class="r"><code>pirate_data %&gt;% filter(
-  str_detect(string = rdate, pattern = &quot;^\\d2/\\d2/\\d4$&quot;))</code></pre>
+  str_detect(string = rdate, pattern = &quot;^\\d{2}/\\d{2}/\\d{4}$&quot;))</code></pre>
 <p>Great, we’ve identified all the patterns of exactly 2digits/2digits/4digits</p>
 <p>Let’s count these and compare to the count of those with the simple pattern “/”</p>
 <pre class="r"><code>pirate_data %&gt;% filter(str_detect(string = rdate, pattern = &quot;/&quot;)) %&gt;% count() ==
   pirate_data %&gt;% filter(
-    str_detect(string = rdate, pattern = &quot;^\\d2/\\d2/\\d4$&quot;)) %&gt;% count()</code></pre>
+    str_detect(string = rdate, pattern = &quot;^\\d{2}/\\d{2}/\\d{4}$&quot;)) %&gt;% count()</code></pre>
 <p>The results of the specific search must at least be a subset of the simple search, since the count is the same we conclude that both searches return exactly the same results. This is important if it is necessary to optimise a search. While both will check every character of the strings that don’t match, the simple search will stop at the third character of the strings that do match, as this is the first occurance of “/”. The specific search will still have to check every character.</p>
 <p>Now we know that all of the dates contianing “/” are of the form “09/19/2018”. (Arrr!)</p>
 <p>We can do a similar thing matching for “-” in the rdate column</p>
@@ -208,9 +208,9 @@ head(pirate_data)</code></pre>
 <p>Here we’ve got two types, some are just dates, but some are datetimes. So we can make the search more specific and check that a simple “-” search is sufficient;</p>
 <pre class="r"><code>pirate_data %&gt;% filter(str_detect(string = rdate, pattern = &quot;-&quot;)) %&gt;% count() ==
 pirate_data %&gt;% filter( #match patterns like &quot;2018-09-19&quot;, anchoring both ends
-  str_detect(string = rdate, pattern = &quot;^\\d4-\\d2-\\d2$&quot;)) %&gt;% count() +
+  str_detect(string = rdate, pattern = &quot;^\\d{4}-\\d{2}-\\d{2}$&quot;)) %&gt;% count() +
 pirate_data %&gt;% filter( #match patterns like &quot;2018-09-19T&quot; anchoring start only
-  str_detect(string = rdate, pattern = &quot;^\\d4-\\d2-\\d2T&quot;)) %&gt;% count()</code></pre>
+  str_detect(string = rdate, pattern = &quot;^\\d{4}-\\d{2}-\\d{2}T&quot;)) %&gt;% count()</code></pre>
 <p>The counts add up, so again the simple search is sufficient and we don’t have any other date types using “-” such as dd-mm-yyyy.</p>
 <p>So, you get the idea - we continue to identfiy all the subsets of dates in rdate and check how best to match them.</p>
 <p>Now we can convert them to proper date type. Below we use another <code>stringr</code> function <code>stringr::str_sub</code> which lets us subset a string specifying the index of the start and end characters. We need this because some of the dates are datetimes and we only want the date part (the first 10 or 5 characters here) for the new date column. We also use various <code>lubridate</code> date conversion functions (<code>dmy</code>, <code>ymd</code>, <code>as_date</code>) to convert the different formats, and the ever useful <code>dplyr::case_when</code> to determine what to do with each subset.</p>
@@ -223,7 +223,7 @@ pirate_data %&gt;% filter( #match patterns like &quot;2018-09-19T&quot; anchorin
     , str_detect(string = rdate, pattern = &quot;-&quot;) ~ lubridate::ymd(
       str_sub(string = rdate, start = 1, end = 10))
     #convert patterns like &quot;42253&quot; and &quot;42253.63542...&quot;
-    , str_detect(rdate, &quot;^\\d5&quot;) ~ lubridate::as_date(
+    , str_detect(rdate, &quot;^\\d{5}&quot;) ~ lubridate::as_date(
       as.numeric(str_sub(rdate, 1, 5)), origin = &quot;1899-12-30&quot;)
     #specify what to do with the remaining unmatched rows
     #NB the type of NA must match the type of the rest, hence 
@@ -282,7 +282,7 @@ pirate_data %&gt;% filter( #match patterns like &quot;2018-09-19T&quot; anchorin
 )
 </code></pre>
 <p>And double check that the NAs are as expected</p>
-<pre class="r"><code>tabyl(filter(pirate\_data, is.na(time)), time, rtime)</code></pre>
+<pre class="r"><code>tabyl(filter(pirate_data, is.na(time)), time, rtime)</code></pre>
 </div>
 <div id="hooray-we-have-proper-dates-times-lets-make-datetimes" class="section level2">
 <h2>Hooray we have proper dates &amp; times lets make datetimes!!!</h2>
@@ -324,7 +324,7 @@ OlsonNames() %&gt;% str_subset(&quot;Pacific/E&quot;)</code></pre>
 <p>Look for patterns using or <code>|</code></p>
 <pre class="r"><code>pirate_exp %&gt;% filter(str_detect(string = expression, pattern = &quot;oa|oy&quot;))</code></pre>
 <p>Look for matches with between <em>n</em> and <em>m</em> occurances of a pattern using <code>n,m</code></p>
-<pre class="r"><code>pirate_exp %&gt;% filter(str_detect(string = expression, pattern = &quot;o3,4&quot;))</code></pre>
+<pre class="r"><code>pirate_exp %&gt;% filter(str_detect(string = expression, pattern = &quot;o{3,4}&quot;))</code></pre>
 <p>Look for matches with a pattern preceded by another pattern</p>
 <pre class="r"><code>pirate_exp %&gt;% filter(str_detect(string = expression, pattern = &quot;(?&lt;=ooa)r&quot;))</code></pre>
 <p>Count the number of matches in a string</p>
