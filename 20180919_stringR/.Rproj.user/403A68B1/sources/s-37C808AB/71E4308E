@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1537372102643.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "71E4308E",
+    "lastKnownWriteTime" : 1537350734,
+    "last_content_update" : 1537350734,
+    "path" : "~/Documents/coffee-and-coding/20180919_stringR/pirate_stringR_demo.Rmd",
+    "project_path" : "pirate_stringR_demo.Rmd",
+    "properties" : {
+        "chunk_output_type" : "inline",
+        "cursorPosition" : "257,3",
+        "scrollLine" : "267"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

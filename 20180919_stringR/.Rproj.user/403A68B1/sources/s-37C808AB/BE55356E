@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1537371418576.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "BE55356E",
+    "lastKnownWriteTime" : 1537371699,
+    "last_content_update" : 1537371699762,
+    "path" : "~/Documents/coffee-and-coding/20180919_stringR/create_pirate_dataset.R",
+    "project_path" : "create_pirate_dataset.R",
+    "properties" : {
+        "cursorPosition" : "2,55",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
