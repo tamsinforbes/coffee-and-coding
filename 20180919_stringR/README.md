@@ -15,7 +15,7 @@ We'll be using some pirate data; as in data collected on pirates and their chara
 Housekeeping
 ------------
 If you are reading this you are reading the README.md file which will give you the text of the talk and the 
-code but none of the code output. To view the code output as well see the rmarkdown output [pirate_stringR_demo.html](https://github.com/departmentfortransport/coffee-and-coding/pirate_stringR_demo.html), to see the original rmarkdown file and run the code yourself clone this repo (which includes the data) and work through **pirate_stringR_demo.Rmd**.
+code but none of the code output. To view the code output as well see the rmarkdown output [pirate_stringR_demo.html](https://github.com/tamsinforbes/coffee-and-coding/tree/master/20180919_stringR/pirate_stringR_demo.html), to see the original rmarkdown file and run the code yourself clone this repo (which includes the data) and work through **pirate_stringR_demo.Rmd**.
 
 If you do not already have the packages used below installed you will need to do so with `install.packages('package_name')`. (If you are running this on DfT network you won't need to install any packages).
 
